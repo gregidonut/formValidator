@@ -12,6 +12,53 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: row;
+    flex-direction: column;
     flex-grow: 1;
+}
+
+#form {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    padding: 1rem;
+}
+
+.form-control {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    align-items: center;
+}
+
+.form-control label {
+    grid-column: 1 / span 1;
+    justify-self: end;
+}
+
+.form-control input {
+    grid-column: 2 / span 1;
+}
+
+.form-control small {
+    grid-column: 3 / span 1;
+    /*display: none;*/
+}
+
+.invalid {
+    border-color: red;
+    background-color: #ffe6e6;
+}
+.valid {
+    border-color: green;
+    background-color: #e6ffe6;
+}
+.error-message {
+    color: red;
+    font-weight: bold;
+    font-size: 0.8rem;
+    margin-top: -1rem;
+    margin-bottom: 1rem;
 }
