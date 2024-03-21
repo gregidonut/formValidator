@@ -49,15 +49,15 @@
 }
 
 .invalid {
-    border-color: red;
-    background-color: #ffe6e6;
+    border-color: #FF5555;
+    background-color: #FF79C6;
 }
 .valid {
-    border-color: green;
-    background-color: #e6ffe6;
+    border-color: #50FA7B;
+    background-color: #8BE9FD;
 }
-.error-message {
-    color: red;
+.error-messages {
+    color: #FF5555;
     font-weight: bold;
     font-size: 1.2rem;
     padding-top: .2rem;
