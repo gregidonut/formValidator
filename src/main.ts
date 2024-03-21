@@ -32,5 +32,4 @@ function validateForm(): void {
     if (!password || password.length < 8) {
         errorMessages.innerHTML += `<li>Password must be at least 8 characters long.</li>`;
     }
-
 }
