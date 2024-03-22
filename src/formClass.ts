@@ -1,13 +1,18 @@
+import { FormControlElement } from "./formControlElement.ts";
+
 new (class {
     private form: HTMLFormElement = document.querySelector("#form")!;
-    private usernameElem: HTMLInputElement =
-        document.querySelector("#username")!;
-    private emailElem: HTMLInputElement =
-        document.querySelector("#email")!;
-    private passwordElem: HTMLInputElement =
-        document.querySelector("#password")!;
-    private password2Elem: HTMLInputElement =
-        document.querySelector("#password2")!;
+    private usernameElem: FormControlElement = new FormControlElement(
+        document.querySelector("#username")!,
+    );
+    private emailElem: FormControlElement = new FormControlElement(
+        document.querySelector("#email")!,
+    );
+    private passwordElem: FormControlElement = new FormControlElement(
+        document.querySelector("#password")!,
+    );
+    private password2Elem: FormControlElement =
+        new FormControlElement(document.querySelector("#password2")!);
     private listOfErrorMessagesULs =
         document.querySelectorAll(".error-messages")!;
 
@@ -19,7 +24,7 @@ new (class {
     }
 
     private validateForm(): void {
-        const username = this.usernameElem.value;
+        // const username = this.usernameElem.value;
         const email = this.emailElem.value;
         const password = this.passwordElem.value;
         const password2 = this.password2Elem.value;
@@ -29,40 +34,24 @@ new (class {
             errorMessagesUL.innerHTML = "";
         }
         this.checkRequired(); // adding `Required` message to blank fields
-
-        if (!username || username.length < 3) {
-            this.appendError(
-                this.usernameElem,
-                "Username must be at least 3 characters long.",
-            );
-        }
+        this.checkLength(this.usernameElem, 3, 18);
+        this.checkLength(this.passwordElem, 8, 24);
 
         const emailPatternRegex =
             /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
         if (!emailPatternRegex.test(email.toLowerCase())) {
-            this.appendError(
-                this.emailElem,
+            this.emailElem.appendError(
                 "Please enter a valid email address.",
             );
         }
 
-        if (!password || password.length < 8) {
-            this.appendError(
-                this.passwordElem,
-                "Password must be at least 8 characters long.",
-            );
-        }
-
         if (!password2 || password !== password2) {
-            this.appendError(
-                this.password2Elem,
-                "Passwords do not match.",
-            );
+            this.password2Elem.appendError("Passwords do not match.");
         }
     }
 
     private checkRequired(): void {
-        const inputArr: HTMLInputElement[] = [
+        const inputArr: FormControlElement[] = [
             this.usernameElem,
             this.emailElem,
             this.passwordElem,
@@ -72,31 +61,29 @@ new (class {
             if (htmlInputElement.value.trim() !== "") {
                 continue;
             }
-            const inputId = htmlInputElement.id;
-            const capitalizedId =
-                inputId[0].toUpperCase() + inputId.substring(1);
+            const capitalizedId = htmlInputElement.fieldName;
 
             if (capitalizedId[capitalizedId.length - 1] === "2") {
-                this.appendError(
-                    htmlInputElement,
-                    "Re-enter password.",
-                );
+                htmlInputElement.appendError("Re-enter password.");
                 return;
             }
 
-            this.appendError(
-                htmlInputElement,
+            htmlInputElement.appendError(
                 `${capitalizedId} is required.`,
             );
         }
     }
 
-    private appendError(
-        inputElement: HTMLInputElement,
-        msg: string,
+    private checkLength(
+        input: FormControlElement,
+        min: number,
+        max: number,
     ): void {
-        inputElement.parentElement!.querySelector(
-            ".error-messages",
-        )!.innerHTML += `<li>${msg}</li>`;
+        if (input.value.length >= min || input.value.length <= max) {
+            return;
+        }
+        input.appendError(
+            `${input.fieldName} must be between ${min} and ${max}`,
+        );
     }
 })();
