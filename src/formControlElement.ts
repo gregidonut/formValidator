@@ -1,7 +1,8 @@
-export const RegisteredFormControlElements: FormControlElement[] = [];
+export const REGISTERED_FORM_CONTROL_ELEMENTS: FormControlElement[] = [];
 
 export class FormControlElement {
     private input: HTMLInputElement;
+    private errorMessagesUL: HTMLUListElement;
 
     constructor(htmlInputElem: HTMLInputElement) {
         if (!htmlInputElem.id) {
@@ -18,8 +19,12 @@ export class FormControlElement {
                 `Input element labeled: ${name} doesn't have an ID`,
             );
         }
-        RegisteredFormControlElements.push(this);
+        REGISTERED_FORM_CONTROL_ELEMENTS.push(this);
         this.input = htmlInputElem;
+        this.errorMessagesUL =
+            this.input.parentElement!.querySelector(
+                ".error-messages",
+            )!;
     }
 
     get fieldName(): string {
@@ -34,8 +39,10 @@ export class FormControlElement {
     }
 
     appendError(msg: string): void {
-        this.input.parentElement!.querySelector(
-            ".error-messages",
-        )!.innerHTML += `<li>${msg}</li>`;
+        this.errorMessagesUL.innerHTML += `<li>${msg}</li>`;
+    }
+
+    clearErrors(): void {
+        this.errorMessagesUL.innerHTML = "";
     }
 }

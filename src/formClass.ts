@@ -1,4 +1,7 @@
-import { FormControlElement } from "./formControlElement.ts";
+import {
+    FormControlElement,
+    REGISTERED_FORM_CONTROL_ELEMENTS,
+} from "./formControlElement.ts";
 
 new (class {
     private form: HTMLFormElement = document.querySelector("#form")!;
@@ -13,8 +16,6 @@ new (class {
     );
     private password2Elem: FormControlElement =
         new FormControlElement(document.querySelector("#password2")!);
-    private listOfErrorMessagesULs =
-        document.querySelectorAll(".error-messages")!;
 
     constructor() {
         this.form.addEventListener("submit", (e: Event): void => {
@@ -24,40 +25,33 @@ new (class {
     }
 
     private validateForm(): void {
-        // const username = this.usernameElem.value;
-        const email = this.emailElem.value;
-        const password = this.passwordElem.value;
-        const password2 = this.password2Elem.value;
-
-        // Resetting error messages to be blank
-        for (const errorMessagesUL of this.listOfErrorMessagesULs) {
-            errorMessagesUL.innerHTML = "";
+        for (const formCtrlElem of REGISTERED_FORM_CONTROL_ELEMENTS) {
+            formCtrlElem.clearErrors();
         }
+
         this.checkRequired(); // adding `Required` message to blank fields
         this.checkLength(this.usernameElem, 3, 18);
         this.checkLength(this.passwordElem, 8, 24);
 
         const emailPatternRegex =
             /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
-        if (!emailPatternRegex.test(email.toLowerCase())) {
+        if (
+            !emailPatternRegex.test(
+                this.emailElem.value.toLowerCase(),
+            )
+        ) {
             this.emailElem.appendError(
                 "Please enter a valid email address.",
             );
         }
 
-        if (!password2 || password !== password2) {
+        if (this.passwordElem.value !== this.password2Elem.value) {
             this.password2Elem.appendError("Passwords do not match.");
         }
     }
 
     private checkRequired(): void {
-        const inputArr: FormControlElement[] = [
-            this.usernameElem,
-            this.emailElem,
-            this.passwordElem,
-            this.password2Elem,
-        ];
-        for (const htmlInputElement of inputArr) {
+        for (const htmlInputElement of REGISTERED_FORM_CONTROL_ELEMENTS) {
             if (htmlInputElement.value.trim() !== "") {
                 continue;
             }
