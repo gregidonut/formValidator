@@ -79,7 +79,7 @@ new (class {
         min: number,
         max: number,
     ): void {
-        if (input.value.length >= min || input.value.length <= max) {
+        if (input.value.length >= min && input.value.length <= max) {
             return;
         }
         input.appendError(
