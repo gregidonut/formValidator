@@ -12,19 +12,10 @@ new (class {
         document.querySelectorAll(".error-messages")!;
 
     constructor() {
-        this.form.addEventListener(
-            "submit",
-            this.handleSubmit.bind(this),
-        );
-    }
-
-    private handleSubmit(e: Event): void {
-        e.preventDefault();
-        for (const errorMessagesUL of this.listOfErrorMessagesULs) {
-            errorMessagesUL.innerHTML = "";
-        }
-        this.checkRequired();
-        this.validateForm();
+        this.form.addEventListener("submit", (e: Event): void => {
+            e.preventDefault();
+            this.validateForm();
+        });
     }
 
     private validateForm(): void {
@@ -32,6 +23,12 @@ new (class {
         const email = this.emailElem.value;
         const password = this.passwordElem.value;
         const password2 = this.password2Elem.value;
+
+        // Resetting error messages to be blank
+        for (const errorMessagesUL of this.listOfErrorMessagesULs) {
+            errorMessagesUL.innerHTML = "";
+        }
+        this.checkRequired(); // adding `Required` message to blank fields
 
         if (!username || username.length < 3) {
             this.appendError(
