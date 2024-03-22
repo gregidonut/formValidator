@@ -17,19 +17,22 @@
 }
 
 #form {
-    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
 
-    padding: 1rem;
     gap: 0.2rem;
+
+    background: #44475a;
+    padding: 8rem 3rem;
+    border-radius: 2rem;
+    border: #6272A4 solid .5rem;
 }
 
 .form-control {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 10rem 1fr;
     grid-template-rows: auto auto;
     align-items: center;
 }
@@ -37,8 +40,14 @@
 .form-control label {
     grid-column: 1 / span 1;
     grid-row: 1 / span 1;
-    justify-self: end;
+    /*justify-self: end;*/
     padding-right: 0.5rem;
+
+    font-size: 1.2rem;
+    text-align: right; /* Align text to the right */
+    /*white-space: nowrap; !* Prevent text from wrapping *!*/
+    overflow: hidden; /* Hide overflowing text */
+    text-overflow: ellipsis; /* Display ellipsis for overflowing text */
 }
 
 .form-control input {
